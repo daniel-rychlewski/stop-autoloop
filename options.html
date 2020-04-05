@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stop AutoLoop - Settings</title>
+    <style>
+      .text {
+        font-size: medium;
+      }
+      .onoffswitch {
+        position: relative; width: 70px;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+      }
+      .onoffswitch-checkbox {
+        display: none;
+      }
+      .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 2px solid #999999; border-radius: 16px;
+      }
+      .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+      }
+      .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 19px; padding: 0; line-height: 19px;
+        font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+        box-sizing: border-box;
+      }
+      .onoffswitch-inner:before {
+        content: "ON";
+        padding-left: 10px;
+        background-color: #34A7C1; color: #FFFFFF;
+      }
+      .onoffswitch-inner:after {
+        content: "OFF";
+        padding-right: 10px;
+        background-color: #EEEEEE; color: #999999;
+        text-align: right;
+      }
+      .onoffswitch-switch {
+        display: block; width: 22px; margin: -1.5px;
+        background: #FFFFFF;
+        position: absolute; top: 0; bottom: 0;
+        right: 47px;
+        border: 2px solid #999999; border-radius: 16px;
+        transition: all 0.3s ease-in 0s;
+      }
+      .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+      }
+      .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- slider for allow playlists/"mix" or not  -->
+    <!-- timeouts make settable in background page -->
+    <form>
+    <table>
+      <tr>
+        <td class="text">
+          <div title="Include playlist links as candidates for avoiding an autoplay loop (i.e. not just videos will be candidates)">
+            Include playlists
+          </div>
+        </td>
+        <td>
+          <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="includePlaylistSwitch">
+            <label class="onoffswitch-label" for="includePlaylistSwitch">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"></span>
+            </label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
+          <div title="If enabled, clears the list of visited sites when a loop occurs" >
+            Clear sites on loop
+          </div>
+        </td>
+        <td>
+          <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="clearSitesAtLoopSwitch" checked>
+            <label class="onoffswitch-label" for="clearSitesAtLoopSwitch">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"></span>
+            </label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
+          <div title="If enabled, clears the list of visited sites whenever the autoplay setting is turned on or off" >
+            Clear sites on autoplay toggle
+          </div>
+        </td>
+        <td>
+          <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="toggleAutoplayClearsSitesSwitch" checked>
+            <label class="onoffswitch-label" for="toggleAutoplayClearsSitesSwitch">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"></span>
+            </label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
+          <div title="Time interval for periodic checking of when the YouTube autoplay toggle button appears in the document model (ms)">
+            Periodic toggle check interval (ms)
+          </div>
+        </td>
+        <td>
+          <input for="toggleCheckInterval" id="toggleCheckInterval">
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
+          <div title="Time interval for periodic checking of YouTube's video recommendations to gather the links as candidates for the next video (ms)">
+            Periodic video recommendations interval (ms)
+          </div>
+        </td>
+        <td>
+          <input for="videoRecommendationsInterval" id="videoRecommendationsInterval">
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
+          <div title="Time interval for periodic checking of when the video has ended (ms)">
+            Periodic video end interval (ms)
+          </div>
+        </td>
+        <td>
+          <input for="videoEndInterval" id="videoEndInterval">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button type="reset" id="resetButton">Reset to default</button> <!--onclick="reset()"-->
+        </td>
+        <td>
+          <button type="button" id="submitButton">Save settings</button> <!-- onclick="submit()" -->
+        </td>
+      </tr>
+    </table>
+    </form>
+    <script src="options.js"></script>
+  </body>
+</html>
