@@ -1,6 +1,8 @@
 # stop-autoloop
 Stops YouTube's autoplay feature from repeating the same videos
 
+Chrome Web Store: https://chrome.google.com/webstore/detail/hdjcnbpapbfgniklmheihogibnmdbijo/
+
 # Problem
 YouTube's autoplay feature leads to situations where a video you have already watched is played next. Such loops of <b>watching the same two videos</b> over and over again (worst case) are not necessarily desirable. This is why this browser extension can redirect the autoplay video which is supposed to be played next. This is done if it detects that the video has been watched already. The add-on supports both foreground and background tabs.
 
@@ -14,12 +16,16 @@ A YouTube video site is also scanned to detect whether or not the <b>autoplay to
 In addition, a video's end is also being detected by the add-on in case of <i>foreground tabs</i>.
 Background tabs do not have such a <b>transition process</b> to the next autoplay video, so they are redirected after a YouTube video site has been called that has already been visited.
 
+![Video](https://github.com/daniel-rychlewski/stop-autoloop/blob/master/images/store/Video.png?raw=true)
+
 # Customization
 The extension does feature customization options in its settings page, accessible through the icon ("Settings").
 The user can decide if <b>playlists</b> that appear in the YouTube recommendations should be included as candidates for the next video,
 if the URL history should be <b>cleared</b> when a redirect occurs due to a potential loop,
 if the autoplay toggle shall <b>clear</b> the URL history and control the periodic <b>checking intervals</b> for site scanning. The settings can be reset to their default values.
 The icon popup also allows the user to clear the URL history manually, which will be confirmed in the add-on's background page.
+
+![Settings](https://github.com/daniel-rychlewski/stop-autoloop/blob/master/images/store/Settings.png?raw=true)
 
 # Disclaimer
 As this is only an early stage of developing the add-on, bugs are absolutely possible.
