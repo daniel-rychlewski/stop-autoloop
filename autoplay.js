@@ -64,7 +64,11 @@
                                 if (result.candidate !== "https://www.youtube.com") {
                                     location.href = result.candidate;
                                 } else {
-                                    location.href = linkElements[0].href; // worst case: updates back and forth many times, but eventually, a different link will be chosen
+                                    chrome.storage.local.get('backgroundRedirectEntry',
+                                        function(data) {
+                                            location.href = linkElements[data.backgroundRedirectEntry].href; // worst case: updates back and forth many times, but eventually, a different link will be chosen
+                                        }
+                                    );
                                 }
                             });
                         }

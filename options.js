@@ -20,6 +20,11 @@ function loadSettings() {
 }
 
 function setInputs() {
+    chrome.storage.local.get('backgroundRedirectEntry',
+        function(data) {
+            document.getElementById('backgroundRedirectEntry').placeholder = data.backgroundRedirectEntry;
+        }
+    );
     chrome.storage.local.get('toggleCheckInterval',
         function(data) {
             document.getElementById('toggleCheckInterval').placeholder = data.toggleCheckInterval;
@@ -52,6 +57,9 @@ function submit() {
     chrome.storage.local.set({'clearSitesAtLoop': document.getElementById('clearSitesAtLoopSwitch').checked});
     chrome.storage.local.set({'toggleAutoplayClearsSites': document.getElementById('toggleAutoplayClearsSitesSwitch').checked});
 
+    if (document.getElementById('backgroundRedirectEntry').value && !isNaN(document.getElementById('backgroundRedirectEntry').value)) {
+        chrome.storage.local.set({'backgroundRedirectEntry': document.getElementById('backgroundRedirectEntry').value});
+    }
     if (document.getElementById('toggleCheckInterval').value && !isNaN(document.getElementById('toggleCheckInterval').value)) {
         chrome.storage.local.set({'toggleCheckInterval': document.getElementById('toggleCheckInterval').value});
     }
