@@ -12,7 +12,7 @@ displaySites.onclick = function(element) {
 };
 
 clearSites.onclick = function(element) {
-  chrome.storage.local.set({'urlHistory': [...new Set()]}, function() {
+  chrome.storage.local.set({'urlHistory': []}, function() {
     var bkg = chrome.extension.getBackgroundPage();
     bkg.console.log("urlHistory has been cleared");
   });

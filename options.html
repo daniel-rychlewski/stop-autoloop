@@ -66,8 +66,8 @@
         </td>
         <td>
           <div class="onoffswitch">
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="includePlaylistSwitch">
-            <label class="onoffswitch-label" for="includePlaylistSwitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="includePlaylists">
+            <label class="onoffswitch-label" for="includePlaylists">
               <span class="onoffswitch-inner"></span>
               <span class="onoffswitch-switch"></span>
             </label>
@@ -82,8 +82,8 @@
         </td>
         <td>
           <div class="onoffswitch">
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="clearSitesAtLoopSwitch" checked>
-            <label class="onoffswitch-label" for="clearSitesAtLoopSwitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="clearSitesAtLoop" checked>
+            <label class="onoffswitch-label" for="clearSitesAtLoop">
               <span class="onoffswitch-inner"></span>
               <span class="onoffswitch-switch"></span>
             </label>
@@ -98,8 +98,8 @@
         </td>
         <td>
           <div class="onoffswitch">
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="toggleAutoplayClearsSitesSwitch" checked>
-            <label class="onoffswitch-label" for="toggleAutoplayClearsSitesSwitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="toggleAutoplayClearsSites" checked>
+            <label class="onoffswitch-label" for="toggleAutoplayClearsSites">
               <span class="onoffswitch-inner"></span>
               <span class="onoffswitch-switch"></span>
             </label>
@@ -108,12 +108,22 @@
       </tr>
       <tr>
         <td class="text">
-          <div title="If seen already, a background tab will be redirected to a YouTube recommendation. By default, it is the first entry (0), but this can be changed here">
+          <div title="If seen already, a background tab will be redirected to a YouTube recommendation. By default, it is the second entry (1), but this can be changed here">
             Redirect background tab to the n-th recommendation entry, n =
           </div>
         </td>
         <td>
           <input for="backgroundRedirectEntry" id="backgroundRedirectEntry">
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
+          <div title="If one of the URLs below is visited, a redirection to a recommendation will occur immediately. One URL per line please">
+            Blacklist
+          </div>
+        </td>
+        <td>
+          <textarea for="blacklist" id="blacklist"></textarea>
         </td>
       </tr>
       <tr>
@@ -148,10 +158,10 @@
       </tr>
       <tr>
         <td>
-          <button type="reset" id="resetButton">Reset to default</button> <!--onclick="reset()"-->
+          <button type="reset" id="resetButton">Reset to default</button>
         </td>
         <td>
-          <button type="button" id="submitButton">Save settings</button> <!-- onclick="submit()" -->
+          <button type="button" id="submitButton">Save settings</button>
         </td>
       </tr>
     </table>

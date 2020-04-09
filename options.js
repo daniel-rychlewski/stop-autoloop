@@ -1,45 +1,83 @@
 'use strict';
 
+var sliderKeys = ['includePlaylists', 'clearSitesAtLoop', 'toggleAutoplayClearsSites'];
+
 function loadSettings() {
-    chrome.storage.local.get('includePlaylists',
-        function(data) {
-            document.getElementById('includePlaylistSwitch').checked = data.includePlaylists;
-        }
-    );
-    chrome.storage.local.get('clearSitesAtLoop',
-        function(data) {
-            document.getElementById('clearSitesAtLoopSwitch').checked = data.clearSitesAtLoop;
-        }
-    );
-    chrome.storage.local.get('toggleAutoplayClearsSites',
-        function(data) {
-            document.getElementById('toggleAutoplayClearsSitesSwitch').checked = data.toggleAutoplayClearsSites;
-        }
-    );
+    setSliders();
     setInputs();
 }
 
+function setSliders() {
+    sliderKeys.forEach(key => {
+        chrome.storage.local.get([key],
+            function(data) {
+                document.getElementById(key).checked = data[key];
+            }
+        );
+    });
+}
+
 function setInputs() {
-    chrome.storage.local.get('backgroundRedirectEntry',
+    ['backgroundRedirectEntry', 'toggleCheckInterval', 'videoRecommendationsInterval', 'videoEndInterval'].forEach(key => {
+        chrome.storage.local.get([key],
+            function(data) {
+                document.getElementById(key).value = data[key];
+            }
+        );
+    });
+    setBlacklistEntries();
+}
+
+function setBlacklistEntries() {
+    let blacklistKey = 'blacklist';
+    chrome.storage.local.get([blacklistKey],
         function(data) {
-            document.getElementById('backgroundRedirectEntry').placeholder = data.backgroundRedirectEntry;
+            document.getElementById(blacklistKey).value = data[blacklistKey].join("\n");
         }
     );
-    chrome.storage.local.get('toggleCheckInterval',
-        function(data) {
-            document.getElementById('toggleCheckInterval').placeholder = data.toggleCheckInterval;
+}
+
+function evaluateSliders() {
+    sliderKeys.forEach(key => {
+        chrome.storage.local.set({[key]: document.getElementById(key).checked});
+    });
+}
+
+function evaluateInputs() {
+    ['backgroundRedirectEntry', 'toggleCheckInterval', 'videoRecommendationsInterval', 'videoEndInterval'].forEach(key => {
+        if (document.getElementById(key).value && !isNaN(document.getElementById(key).value)) {
+            chrome.storage.local.set({[key]: document.getElementById(key).value});
         }
-    );
-    chrome.storage.local.get('videoRecommendationsInterval',
-        function(data) {
-            document.getElementById('videoRecommendationsInterval').placeholder = data.videoRecommendationsInterval;
+    });
+    evaluateBlacklistEntries();
+}
+
+function evaluateBlacklistEntries() {
+    let blacklistKey = 'blacklist';
+    let blacklistValue = document.getElementById(blacklistKey).value;
+    if (blacklistValue) {
+        let blacklistLines = blacklistValue.split('\n');
+        let isValid = true;
+        let youtubePrefix = "www.youtube.com/watch?";
+        blacklistLines.forEach(line => {
+            if (!line.startsWith("https://"+youtubePrefix) && !line.startsWith("http://"+youtubePrefix)) {
+                isValid = false;
+            }
+        });
+        if (isValid) {
+            chrome.storage.local.set({[blacklistKey]: blacklistLines});
         }
-    );
-    chrome.storage.local.get('videoEndInterval',
-        function(data) {
-            document.getElementById('videoEndInterval').placeholder = data.videoEndInterval;
-        }
-    );
+    }
+}
+
+function submit() {
+    evaluateSliders();
+    evaluateInputs();
+}
+
+function reset() {
+    chrome.extension.getBackgroundPage().setupVariables();
+    setInputs();
 }
 
 window.addEventListener('load', function load(event) {
@@ -51,29 +89,5 @@ window.addEventListener('load', function load(event) {
     var resetButton = document.getElementById('resetButton');
     resetButton.addEventListener('click', function() { reset(); });
 });
-
-function submit() {
-    chrome.storage.local.set({'includePlaylists': document.getElementById('includePlaylistSwitch').checked});
-    chrome.storage.local.set({'clearSitesAtLoop': document.getElementById('clearSitesAtLoopSwitch').checked});
-    chrome.storage.local.set({'toggleAutoplayClearsSites': document.getElementById('toggleAutoplayClearsSitesSwitch').checked});
-
-    if (document.getElementById('backgroundRedirectEntry').value && !isNaN(document.getElementById('backgroundRedirectEntry').value)) {
-        chrome.storage.local.set({'backgroundRedirectEntry': document.getElementById('backgroundRedirectEntry').value});
-    }
-    if (document.getElementById('toggleCheckInterval').value && !isNaN(document.getElementById('toggleCheckInterval').value)) {
-        chrome.storage.local.set({'toggleCheckInterval': document.getElementById('toggleCheckInterval').value});
-    }
-    if (document.getElementById('videoRecommendationsInterval').value && !isNaN(document.getElementById('videoRecommendationsInterval').value)) {
-        chrome.storage.local.set({'videoRecommendationsInterval': document.getElementById('videoRecommendationsInterval').value});
-    }
-    if (document.getElementById('videoEndInterval').value && !isNaN(document.getElementById('videoEndInterval').value)) {
-        chrome.storage.local.set({'videoEndInterval': document.getElementById('videoEndInterval').value});
-    }
-}
-
-function reset() {
-    chrome.extension.getBackgroundPage().setupVariables();
-    setInputs();
-}
 
 loadSettings();

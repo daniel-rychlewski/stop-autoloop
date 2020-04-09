@@ -23,7 +23,7 @@
                                 chrome.storage.local.get('candidate', function (result) {
                                     let candidate = result.candidate;
                                     if (clearSites.clearSitesAtLoop) {
-                                        chrome.storage.local.set({'urlHistory': [...new Set()]}, function() {
+                                        chrome.storage.local.set({'urlHistory': []}, function() {
                                             if (location.href === nextAutoplayLink) {
                                                 location.href = candidate;
                                             }
@@ -94,7 +94,7 @@
             chrome.storage.local.get('toggleAutoplayClearsSites', function (result) {
                 if (result.toggleAutoplayClearsSites) {
                     // reset url history if user has turned autoplay off
-                    chrome.storage.local.set({'urlHistory': [...new Set()]});
+                    chrome.storage.local.set({'urlHistory': []});
                 }
             });
         }
