@@ -23,10 +23,12 @@
                                 chrome.storage.local.get('candidate', function (result) {
                                     let candidate = result.candidate;
                                     if (clearSites.clearSitesAtLoop) {
-                                        chrome.storage.local.set({'urlHistory': []}, function() {
-                                            if (location.href === nextAutoplayLink) {
-                                                location.href = candidate;
-                                            }
+                                        chrome.storage.local.get('blacklist', function (blacklist) {
+                                            chrome.storage.local.set({'urlHistory': blacklist.blacklist}, function() {
+                                                if (location.href === nextAutoplayLink) {
+                                                    location.href = candidate;
+                                                }
+                                            });
                                         });
                                     } else {
                                         if (location.href === nextAutoplayLink) {

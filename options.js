@@ -56,16 +56,20 @@ function evaluateBlacklistEntries() {
     let blacklistKey = 'blacklist';
     let blacklistValue = document.getElementById(blacklistKey).value;
     if (blacklistValue) {
-        let blacklistLines = blacklistValue.split('\n');
+        var blacklistLines = blacklistValue.split('\n');
         let isValid = true;
-        let youtubePrefix = "www.youtube.com/watch?";
         blacklistLines.forEach(line => {
-            if (!line.startsWith("https://"+youtubePrefix) && !line.startsWith("http://"+youtubePrefix)) {
+            if (!line.startsWith("https://www.youtube.com/watch?")) {
                 isValid = false;
             }
         });
         if (isValid) {
             chrome.storage.local.set({[blacklistKey]: blacklistLines});
+
+            chrome.storage.local.get('urlHistory', function (result) {
+                blacklistLines.forEach(url => result.urlHistory.push(url));
+                chrome.storage.local.set({'urlHistory': result.urlHistory});
+            });
         }
     }
 }
