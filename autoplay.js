@@ -19,7 +19,8 @@
 
                             var composeObserver = new MutationObserver(async function (mutations) {
                                 var linkElements = document.getElementsByClassName("yt-simple-endpoint style-scope ytd-compact-video-renderer"); // hope that other videos are loaded when first video link update is seen by mutation observer
-                                await saveNextVideoCandidate(urlHistory, linkElements);
+                                var videoLengths = document.querySelectorAll("#overlays > ytd-thumbnail-overlay-time-status-renderer > span");
+                                await saveNextVideoCandidate(urlHistory, linkElements, videoLengths);
 
                                 chrome.storage.local.get('clearSitesAtLoop', function (clearSites) {
                                     chrome.storage.local.get('candidate', function (result) {
@@ -64,8 +65,9 @@
                         chrome.storage.local.get('whitelist', function (whitelist) {
                             if (urlHistory.has(location.href) && !whitelist.whitelist.includes(location.href)) {
                                 let linkElements = document.getElementsByClassName("yt-simple-endpoint style-scope ytd-compact-video-renderer");
+                                let videoLengths = document.querySelectorAll("#overlays > ytd-thumbnail-overlay-time-status-renderer > span");
                                 (async function() {
-                                    await saveNextVideoCandidate(urlHistory, linkElements);
+                                    await saveNextVideoCandidate(urlHistory, linkElements, videoLengths);
                                 })();
                                 chrome.storage.local.get('candidate', function (result) {
                                     if (result.candidate !== "https://www.youtube.com") {
@@ -131,15 +133,34 @@ function isPlaylistLink(linkToAnalyze) {
     return linkToAnalyze.includes("&list=") || linkToAnalyze.includes("&start_radio=")
 }
 
-function saveNextVideoCandidate(urlHistory, linkElementsToChooseFrom) {
-    chrome.storage.local.get('includePlaylists', function (result) {
-        for (let i = 1; i < linkElementsToChooseFrom.length; i++) {
-            let linkToAnalyze = linkElementsToChooseFrom[i].href;
-            if (!urlHistory.has(linkToAnalyze) && (result.includePlaylists || !isPlaylistLink(linkToAnalyze))) {
-                chrome.storage.local.set({'candidate': linkToAnalyze});
-                return;
+function getIntegerMinutes(timeString) {
+    // valid formats, which all need to be considered ([hh:m]m:ss): 1:23:34, 24:00:01, 32:31, 0:03
+    let timeContents = timeString.split(":");
+    let numberOfColons = timeContents.length - 1;
+    if (numberOfColons === 2) {
+        return parseInt(timeContents[0]) * 60 + parseInt(timeContents[1]);
+    } else if (numberOfColons === 1) {
+        return parseInt(timeContents[0]);
+    }
+}
+
+function saveNextVideoCandidate(urlHistory, linkElementsToChooseFrom, videoLengths) {
+    chrome.storage.local.get('maximumVideoLength', function (videoLength) {
+        chrome.storage.local.get('includePlaylists', function (result) {
+            for (let i = 1; i < linkElementsToChooseFrom.length; i++) {
+                let linkToAnalyze = linkElementsToChooseFrom[i].href;
+                if (!urlHistory.has(linkToAnalyze) && (result.includePlaylists || !isPlaylistLink(linkToAnalyze))) {
+                    // check video time
+                    let colonTime = videoLengths[i].innerText;
+                    console.log(videoLength.maximumVideoLength)
+                    console.log(getIntegerMinutes(colonTime))
+                    if (videoLength.maximumVideoLength === "0" || getIntegerMinutes(colonTime) < videoLength.maximumVideoLength) {
+                        chrome.storage.local.set({'candidate': linkToAnalyze});
+                        return;
+                    }
+                }
             }
-        }
-        chrome.storage.local.set({'candidate': "https://www.youtube.com"}); // highly unlikely scenario that nothing suitable is found
+            chrome.storage.local.set({'candidate': "https://www.youtube.com"}); // highly unlikely scenario that nothing suitable is found
+        });
     });
 }
