@@ -82,7 +82,7 @@
         </td>
         <td>
           <div class="onoffswitch">
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="clearSitesAtLoop" checked>
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="clearSitesAtLoop">
             <label class="onoffswitch-label" for="clearSitesAtLoop">
               <span class="onoffswitch-inner"></span>
               <span class="onoffswitch-switch"></span>
@@ -118,12 +118,32 @@
       </tr>
       <tr>
         <td class="text">
+          <div title="Videos above that length will never be played next, even if it is a video that has not been watched yet">
+            Maximum video length of a recommendation in minutes (0 for "not set")
+          </div>
+        </td>
+        <td>
+          <input for="maximumVideoLength" id="maximumVideoLength">
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
           <div title="If one of the URLs below is visited via autoplay, a redirection to a recommendation will occur immediately. For foreground tabs, this strategy for a video's recommendation will only work if this current video has been loaded via autoplay (i.e. not manually clicked)">
             Blacklist (one URL per line)
           </div>
         </td>
         <td>
           <textarea for="blacklist" id="blacklist"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td class="text">
+          <div title="Any URL here will not be skipped, regardless of whether or not it has been watched already">
+            Whitelist (one URL per line)
+          </div>
+        </td>
+        <td>
+          <textarea for="whitelist" id="whitelist"></textarea>
         </td>
       </tr>
       <tr>
