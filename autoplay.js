@@ -13,67 +13,73 @@
                 let recommendationsObserver = new MutationObserver(function (mutations) {
                     let nextAutoplayLink = mutations[0].target.href;
 
-                    if (urlHistory.has(nextAutoplayLink)) {
+                    chrome.storage.local.get('whitelist', function (whitelist) {
 
-                        var composeObserver = new MutationObserver(async function (mutations) {
-                            var linkElements = document.getElementsByClassName("yt-simple-endpoint style-scope ytd-compact-video-renderer"); // hope that other videos are loaded when first video link update is seen by mutation observer
-                            await saveNextVideoCandidate(urlHistory, linkElements);
+                        if (urlHistory.has(nextAutoplayLink) && !whitelist.whitelist.includes(nextAutoplayLink)) {
 
-                            chrome.storage.local.get('clearSitesAtLoop', function (clearSites) {
-                                chrome.storage.local.get('candidate', function (result) {
-                                    let candidate = result.candidate;
-                                    if (clearSites.clearSitesAtLoop) {
-                                        chrome.storage.local.get('blacklist', function (blacklist) {
-                                            chrome.storage.local.set({'urlHistory': blacklist.blacklist}, function() {
-                                                if (location.href === nextAutoplayLink) {
-                                                    location.href = candidate;
-                                                }
+                            var composeObserver = new MutationObserver(async function (mutations) {
+                                var linkElements = document.getElementsByClassName("yt-simple-endpoint style-scope ytd-compact-video-renderer"); // hope that other videos are loaded when first video link update is seen by mutation observer
+                                await saveNextVideoCandidate(urlHistory, linkElements);
+
+                                chrome.storage.local.get('clearSitesAtLoop', function (clearSites) {
+                                    chrome.storage.local.get('candidate', function (result) {
+                                        let candidate = result.candidate;
+                                        if (clearSites.clearSitesAtLoop) {
+                                            chrome.storage.local.get('blacklist', function (blacklist) {
+                                                chrome.storage.local.set({'urlHistory': blacklist.blacklist}, function() {
+                                                    if (location.href === nextAutoplayLink) {
+                                                        location.href = candidate;
+                                                    }
+                                                });
                                             });
-                                        });
-                                    } else {
-                                        if (location.href === nextAutoplayLink) {
-                                            location.href = candidate;
+                                        } else {
+                                            if (location.href === nextAutoplayLink) {
+                                                location.href = candidate;
+                                            }
                                         }
-                                    }
+                                    });
                                 });
                             });
-                        });
 
-                        function addObserverAtVideoEnd() {
-                            chrome.storage.local.get('videoEndInterval', function (result) {
-                                let composeBox = document.querySelector("#movie_player > div.html5-endscreen.ytp-player-content.videowall-endscreen.ytp-show-tiles");
+                            function addObserverAtVideoEnd() {
+                                chrome.storage.local.get('videoEndInterval', function (result) {
+                                    let composeBox = document.querySelector("#movie_player > div.html5-endscreen.ytp-player-content.videowall-endscreen.ytp-show-tiles");
 
-                                if (!composeBox) {
-                                    window.setTimeout(addObserverAtVideoEnd, result.videoEndInterval);
-                                    return;
-                                }
-                                let config = {attributes: true};
-                                composeObserver.observe(composeBox, config);
-                            });
+                                    if (!composeBox) {
+                                        window.setTimeout(addObserverAtVideoEnd, result.videoEndInterval);
+                                        return;
+                                    }
+                                    let config = {attributes: true};
+                                    composeObserver.observe(composeBox, config);
+                                });
+                            }
+
+                            addObserverAtVideoEnd();
                         }
 
-                        addObserverAtVideoEnd();
-                    }
+                    });
 
                     // for background tabs, we do not check in advance, but when the suggested autoplay page is already loaded. Easier to compare that way because video suggestions might not be loaded
                     if (document.visibilityState === "hidden") {
-                        if (urlHistory.has(location.href)) {
-                            let linkElements = document.getElementsByClassName("yt-simple-endpoint style-scope ytd-compact-video-renderer");
-                            (async function() {
-                                await saveNextVideoCandidate(urlHistory, linkElements);
-                            })();
-                            chrome.storage.local.get('candidate', function (result) {
-                                if (result.candidate !== "https://www.youtube.com") {
-                                    location.href = result.candidate;
-                                } else {
-                                    chrome.storage.local.get('backgroundRedirectEntry',
-                                        function(data) {
-                                            location.href = linkElements[data.backgroundRedirectEntry].href; // worst case: updates back and forth many times, but eventually, a different link will be chosen
-                                        }
-                                    );
-                                }
-                            });
-                        }
+                        chrome.storage.local.get('whitelist', function (whitelist) {
+                            if (urlHistory.has(location.href) && !whitelist.whitelist.includes(location.href)) {
+                                let linkElements = document.getElementsByClassName("yt-simple-endpoint style-scope ytd-compact-video-renderer");
+                                (async function() {
+                                    await saveNextVideoCandidate(urlHistory, linkElements);
+                                })();
+                                chrome.storage.local.get('candidate', function (result) {
+                                    if (result.candidate !== "https://www.youtube.com") {
+                                        location.href = result.candidate;
+                                    } else {
+                                        chrome.storage.local.get('backgroundRedirectEntry',
+                                            function(data) {
+                                                location.href = linkElements[data.backgroundRedirectEntry].href; // worst case: updates back and forth many times, but eventually, a different link will be chosen
+                                            }
+                                        );
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
 
