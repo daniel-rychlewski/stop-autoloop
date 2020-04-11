@@ -104,7 +104,9 @@
             chrome.storage.local.get('toggleAutoplayClearsSites', function (result) {
                 if (result.toggleAutoplayClearsSites) {
                     // reset url history if user has turned autoplay off
-                    chrome.storage.local.set({'urlHistory': []});
+                    chrome.storage.local.get('blacklist', function (blacklist) {
+                        chrome.storage.local.set({'urlHistory': blacklist.blacklist});
+                    });
                 }
             });
         }
