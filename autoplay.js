@@ -152,8 +152,6 @@ function saveNextVideoCandidate(urlHistory, linkElementsToChooseFrom, videoLengt
                 if (!urlHistory.has(linkToAnalyze) && (result.includePlaylists || !isPlaylistLink(linkToAnalyze))) {
                     // check video time
                     let colonTime = videoLengths[i].innerText;
-                    console.log(videoLength.maximumVideoLength)
-                    console.log(getIntegerMinutes(colonTime))
                     if (videoLength.maximumVideoLength === "0" || getIntegerMinutes(colonTime) < videoLength.maximumVideoLength) {
                         chrome.storage.local.set({'candidate': linkToAnalyze});
                         return;
