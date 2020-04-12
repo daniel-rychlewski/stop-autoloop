@@ -27,7 +27,7 @@ The icon popup also allows the user to clear the URL history manually, which wil
 
 Since v1.1, <b>blacklists and whitelists</b> are supported, the user can choose <b>which recommendation</b> of the many the add-on should select, he can display the URL history via the popup page to the extension's backup page and videos above a user-defined <b>maximum length</b> in minutes are never played. The permissions have been refined to ask for less.
 
-![Settings](https://github.com/daniel-rychlewski/stop-autoloop/blob/master/images/store/Settings.png?raw=true)
+![Settings](https://github.com/daniel-rychlewski/stop-autoloop/blob/8cec49a031bd46bf4c5122a23c5888c01962e87c/images/store/Settings.png?raw=true)
 
 # Disclaimer
 As this is only an early stage of developing the add-on, bugs are absolutely possible.
