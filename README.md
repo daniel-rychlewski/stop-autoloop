@@ -25,13 +25,14 @@ if the URL history should be <b>cleared</b> when a redirect occurs due to a pote
 if the autoplay toggle shall <b>clear</b> the URL history and control the periodic <b>checking intervals</b> for site scanning. The settings can be reset to their default values.
 The icon popup also allows the user to clear the URL history manually, which will be confirmed in the add-on's background page.
 
+Since v1.1, <b>blacklists and whitelists</b> are supported, the user can choose <b>which recommendation</b> of the many the add-on should select, he can display the URL history via the popup page to the extension's backup page and videos above a user-defined <b>maximum length</b> in minutes are never played. The permissions have been refined to ask for less.
+
 ![Settings](https://github.com/daniel-rychlewski/stop-autoloop/blob/master/images/store/Settings.png?raw=true)
 
 # Disclaimer
 As this is only an early stage of developing the add-on, bugs are absolutely possible.
-This is especially likely in settings with multiple YouTube video tabs, but also in background tabs,
-where a video called "a" might be <b>repeated</b> in a situation where the first recommendation of "a" is "b" and of "b" is "a" (where the URL history is cleared at a loop).
-It is also not yet possible to <b>change what happens</b> after detecting a possible loop (e.g., notifying the user, disabling autoplay, choosing the most popular video from the recommendations instead of the first unseen entry every time) as this is just a simple add-on right now.
+This is especially likely in settings with multiple YouTube video tabs.
+It is also not yet possible to <b>change what happens</b> after detecting a possible loop (e.g., notifying the user, disabling autoplay, choosing the most popular video from the recommendations instead of the n-th unseen entry every time) as this is just a simple add-on right now.
 
 # Support
 I sincerely hope someone finds this add-on just as useful as I consider it for watching YouTube videos. If you would like to support my work, I would appreciate any donation amount on my Patreon: https://www.patreon.com/danielrychlewski
