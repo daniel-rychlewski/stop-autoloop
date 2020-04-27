@@ -3,6 +3,8 @@ Stops YouTube's autoplay feature from repeating the same videos
 
 Chrome Web Store: https://chrome.google.com/webstore/detail/hdjcnbpapbfgniklmheihogibnmdbijo/
 
+Unfortunately, the Chrome Web Store is not giving me an option to reply to your feedback so I could troubleshoot bugs you discover or ask for more details for reproducibility. Thank you anyway for sharing your impressions of the add-on (I am still able to read the comments).
+
 # Problem
 YouTube's autoplay feature leads to situations where a video you have already watched is played next. Such loops of <b>watching the same two videos</b> over and over again (worst case) are not necessarily desirable. This is why this browser extension can redirect the autoplay video which is supposed to be played next. This is done if it detects that the video has been watched already. The add-on supports both foreground and background tabs.
 
