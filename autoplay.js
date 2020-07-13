@@ -160,7 +160,7 @@ function saveNextVideoCandidate(urlHistory, linkElementsToChooseFrom, videoLengt
                     }
                 }
             }
-            chrome.storage.local.set({'candidate': "https://www.youtube.com"}); // highly unlikely scenario that nothing suitable is found
+            chrome.storage.local.set({'candidate': window.location.href}); // highly unlikely scenario that nothing suitable is found. In this case, looping is better than redirecting to www.youtube.com
         });
     });
 }
