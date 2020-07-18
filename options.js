@@ -18,7 +18,7 @@ function setSliders() {
 }
 
 function setInputs() {
-    ['backgroundRedirectEntry', 'maximumVideoLength', 'toggleCheckInterval', 'videoRecommendationsInterval', 'videoEndInterval'].forEach(key => {
+    ['backgroundRedirectEntry', 'minimumVideoLength', 'maximumVideoLength', 'toggleCheckInterval', 'videoRecommendationsInterval', 'videoEndInterval'].forEach(key => {
         chrome.storage.local.get([key],
             function(data) {
                 document.getElementById(key).value = data[key];
@@ -46,7 +46,7 @@ function evaluateSliders() {
 }
 
 function evaluateInputs() {
-    ['backgroundRedirectEntry', 'maximumVideoLength', 'toggleCheckInterval', 'videoRecommendationsInterval', 'videoEndInterval'].forEach(key => {
+    ['backgroundRedirectEntry', 'minimumVideoLength', 'maximumVideoLength', 'toggleCheckInterval', 'videoRecommendationsInterval', 'videoEndInterval'].forEach(key => {
         if (document.getElementById(key).value && !isNaN(document.getElementById(key).value)) {
             chrome.storage.local.set({[key]: document.getElementById(key).value});
         }

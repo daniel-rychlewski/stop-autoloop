@@ -4,6 +4,7 @@ function setupVariables() {
     chrome.storage.local.set({'clearSitesAtLoop': false});
     chrome.storage.local.set({'toggleAutoplayClearsSites': true});
     chrome.storage.local.set({'backgroundRedirectEntry': 1});
+    chrome.storage.local.set({'minimumVideoLength': 0});
     chrome.storage.local.set({'maximumVideoLength': 0});
     chrome.storage.local.set({'blacklist': ['https://www.youtube.com/watch?v=BLACKLISTED']});
     chrome.storage.local.set({'whitelist': ['https://www.youtube.com/watch?v=WHITELISTED']});

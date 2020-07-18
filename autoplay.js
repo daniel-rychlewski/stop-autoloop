@@ -147,20 +147,26 @@ function getIntegerMinutes(timeString) {
 }
 
 function saveNextVideoCandidate(urlHistory, linkElementsToChooseFrom, videoLengths) {
-    chrome.storage.local.get('maximumVideoLength', function (videoLength) {
-        chrome.storage.local.get('includePlaylists', function (result) {
-            for (let i = 1; i < linkElementsToChooseFrom.length; i++) {
-                let linkToAnalyze = linkElementsToChooseFrom[i].href;
-                if (!urlHistory.has(linkToAnalyze) && (result.includePlaylists || !isPlaylistLink(linkToAnalyze))) {
-                    // check video time
-                    let colonTime = videoLengths[i].innerText;
-                    if (videoLength.maximumVideoLength === "0" || getIntegerMinutes(colonTime) < videoLength.maximumVideoLength) {
-                        chrome.storage.local.set({'candidate': linkToAnalyze});
-                        return;
+    chrome.storage.local.get('minimumVideoLength', function (minVideoLength) {
+        chrome.storage.local.get('maximumVideoLength', function (videoLength) {
+            chrome.storage.local.get('includePlaylists', function (result) {
+                for (let i = 1; i < linkElementsToChooseFrom.length; i++) {
+                    let linkToAnalyze = linkElementsToChooseFrom[i].href;
+                    if (!urlHistory.has(linkToAnalyze) && (result.includePlaylists || !isPlaylistLink(linkToAnalyze))) {
+                        // check video time
+                        let colonTime = videoLengths[i].innerText;
+                        let integerMinutes = getIntegerMinutes(colonTime);
+
+                        if (integerMinutes < minVideoLength.minimumVideoLength) {
+                            if (videoLength.maximumVideoLength === "0" || integerMinutes < videoLength.maximumVideoLength) {
+                                chrome.storage.local.set({'candidate': linkToAnalyze});
+                                return;
+                            }
+                        }
                     }
                 }
-            }
-            chrome.storage.local.set({'candidate': window.location.href}); // highly unlikely scenario that nothing suitable is found. In this case, looping is better than redirecting to www.youtube.com
+                chrome.storage.local.set({'candidate': window.location.href}); // highly unlikely scenario that nothing suitable is found. In this case, looping is better than redirecting to www.youtube.com
+            });
         });
     });
 }
